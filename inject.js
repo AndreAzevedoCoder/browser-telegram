@@ -204,7 +204,7 @@ async function scale(
     const previewBlobUrl = await scaleImage(file, ratioForThumb, 'image/jpeg');
 
 
-    const LAST_MESSAGE_ID = 450
+    const LAST_MESSAGE_ID = 480
 
     // 4) create attachment object in the same shape Telegram uses
     const attachment = {
@@ -214,13 +214,16 @@ async function scale(
       filename: file.name,
       mimeType: file.type,
       size: file.size,
-      quick: { width, height },
+      quick: { width, height, duration: 5 },
       previewBlobUrl,
       shouldSendAsFile: undefined,       // <- will log as null
       uniqueId: `${Date.now()}-${Math.random()}`,
       shouldSendInHighQuality: false,
       compressedBlobUrl: compressedBlobUrl,                 // this one did not exist in the working log, but likely fine
       shouldSendAsSpoiler: true,
+      ttlSeconds: ttlSeconds,
+      period: ttlSeconds,
+      spoiler: true,
     };
 
 
@@ -280,6 +283,9 @@ async function scale(
       isStoryReply: false,
       isPending: undefined,
       wasDrafted: false,
+      ttlSeconds: ttlSeconds,
+      period: ttlSeconds,
+      spoiler: true,
     }]);
 
 
@@ -325,9 +331,7 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
 
     const origPostMessage = w.postMessage;
     w.postMessage = function(message, ...rest) {
-      console.log("→ to worker:", JSON.stringify(message, (key, value) =>
-  value === undefined ? null : value
-));
+      // console.log("→ to worker:", message);
       return origPostMessage.call(this, message, ...rest);
     };
 
@@ -336,6 +340,6 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
 
 })()
 
-  console.log("for each pai. vrum vrum222123 abracadabra nulificado camaro passando!")
+  console.log("combo de 20!")
 
 //sendSpoilerFromUrl("https://upload.wikimedia.org/wikipedia/commons/9/99/Black_square.jpg", 5);
