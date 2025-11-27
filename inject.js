@@ -204,72 +204,84 @@ async function scale(
     const previewBlobUrl = await scaleImage(file, ratioForThumb, 'image/jpeg');
 
 
-    const LAST_MESSAGE_ID = 431
+    const LAST_MESSAGE_ID = 450
 
     // 4) create attachment object in the same shape Telegram uses
     const attachment = {
       blob: file,
       audio: undefined,
-      blobUrl,               // original full-sized file
+      blobUrl,
       filename: file.name,
       mimeType: file.type,
       size: file.size,
-      quick: {               // original dimensions
-        width,
-        height,
-      },
-      previewBlobUrl,        // tiny thumbnail
+      quick: { width, height },
+      previewBlobUrl,
+      shouldSendAsFile: undefined,       // <- will log as null
       uniqueId: `${Date.now()}-${Math.random()}`,
       shouldSendInHighQuality: false,
-      compressedBlobUrl: compressedBlobUrl,     // resized/compressed photo Telegram will likely upload
+      compressedBlobUrl: compressedBlobUrl,                 // this one did not exist in the working log, but likely fine
       shouldSendAsSpoiler: true,
-      // ttlSeconds,
     };
+
+
 
     // === build args as in your captured template ===
     let args = structuredClone([{
-      "messageList": {
-        "chatId": "7765319772",
-        "threadId": -1,
-        "type": "thread",
+      messageList: {
+        chatId: "7765319772",
+        threadId: -1,
+        type: "thread",
       },
-      "text": "",
-      "isSilent": false,
-      "shouldUpdateStickerSetOrder": true,
-      "shouldGroupMessages": true,
-      "chat": {
-        "id": "7765319772",
-        "type": "chatTypePrivate",
-        "title": "André",
-        "isMin": false,
-        "usernames": [
+      text: "",
+      // These will show up as null in your JSON.stringify replacer
+      entities: undefined,
+      scheduledAt: undefined,
+      scheduleRepeatPeriod: undefined,
+      isSilent: false,
+      shouldUpdateStickerSetOrder: true,
+      shouldGroupMessages: true,
+      isInvertedMedia: undefined,
+      chat: {
+        id: "7765319772",
+        type: "chatTypePrivate",
+        title: "André",
+        isMin: false,
+        usernames: [
           {
-            "username": "ozym1888",
-            "isActive": true,
-            "isEditable": true,
+            username: "ozym1888",
+            isActive: true,
+            isEditable: true,
           },
         ],
-        "accessHash": "-7127778048549655621",
-        "isVerified": false,
-        "isCallActive": false,
-        "isCallNotEmpty": false,
-        "hasUsername": true,
-        "isProtected": false,
-        "isCreator": false,
-        "isForum": false,
-        "isBotForum": false,
-        "areStoriesHidden": false,
-        "hasStories": false,
-        "lastReadOutboxMessageId": 0,
-        "lastReadInboxMessageId": LAST_MESSAGE_ID,
-        "unreadCount": 0,
-        "unreadMentionsCount": 0,
-        "isListed": true,
+        accessHash: "-7127778048549655621",
+        isVerified: false,
+        isCallActive: false,
+        isCallNotEmpty: false,
+        hasUsername: true,
+        isProtected: false,
+        isCreator: false,
+        isForum: false,
+        isBotForum: false,
+        areStoriesHidden: false,
+        hasStories: false,
+        lastReadOutboxMessageId: 0,
+        lastReadInboxMessageId: LAST_MESSAGE_ID,
+        unreadCount: 0,
+        unreadMentionsCount: 0,
+        isListed: true,
       },
-      "lastMessageId": LAST_MESSAGE_ID,
-      "isStoryReply": false,
-      "wasDrafted": false,
+      replyInfo: undefined,
+      suggestedPostInfo: undefined,
+      suggestedMedia: undefined,
+      noWebPage: undefined,
+      sendAs: undefined,
+      lastMessageId: LAST_MESSAGE_ID,
+      messagePriceInStars: undefined,
+      isStoryReply: false,
+      isPending: undefined,
+      wasDrafted: false,
     }]);
+
 
     // ⬅️ important: args is an array; attach on args[0], not args.attachment
     args[0].attachment = attachment;
@@ -278,17 +290,28 @@ async function scale(
 
     console.log("💣 sending TEMP SPOILER message with args:", args);
 
-
-
-    window.__tgWorkers[0].postMessage({
-      payloads: [{
-        name: "sendMessage",
-        type: "callMethod",
-        args: args,
-        messageId: "mig" + Math.random().toString(36).slice(2),
-        withCallback: true,
-      }],
+    window.__tgWorkers.forEach((w, i) => {
+      const orig = w.postMessage;
+      w.postMessage({
+        payloads: [{
+          name: "sendMessage",
+          type: "callMethod",
+          args: args,
+          messageId: "mig" + Math.random().toString(36).slice(2),
+          withCallback: true,
+        }],
+      });
     });
+
+    // window.__tgWorkers[0].postMessage({
+    //   payloads: [{
+    //     name: "sendMessage",
+    //     type: "callMethod",
+    //     args: args,
+    //     messageId: "mig" + Math.random().toString(36).slice(2),
+    //     withCallback: true,
+    //   }],
+    // });
   };
 
 async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
@@ -323,4 +346,6 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
 
 })()
 
-  console.log("vrum vrum camaro passando!")
+  console.log("for each pai. vrum vrum222123 abracadabra nulificado camaro passando!")
+
+//sendSpoilerFromUrl("https://upload.wikimedia.org/wikipedia/commons/9/99/Black_square.jpg", 5);
