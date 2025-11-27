@@ -253,22 +253,22 @@ async function scale(
             isEditable: true,
           },
         ],
-        // accessHash: "-7127778048549655621",
-        // isVerified: false,
-        // isCallActive: false,
-        // isCallNotEmpty: false,
-        // hasUsername: true,
-        // isProtected: false,
-        // isCreator: false,
-        // isForum: false,
-        // isBotForum: false,
-        // areStoriesHidden: false,
-        // hasStories: false,
-        // lastReadOutboxMessageId: 0,
-        // lastReadInboxMessageId: LAST_MESSAGE_ID,
-        // unreadCount: 0,
-        // unreadMentionsCount: 0,
-        // isListed: true,
+        accessHash: "-7127778048549655621",
+        isVerified: false,
+        isCallActive: false,
+        isCallNotEmpty: false,
+        hasUsername: true,
+        isProtected: false,
+        isCreator: false,
+        isForum: false,
+        isBotForum: false,
+        areStoriesHidden: false,
+        hasStories: false,
+        lastReadOutboxMessageId: 0,
+        lastReadInboxMessageId: LAST_MESSAGE_ID,
+        unreadCount: 0,
+        unreadMentionsCount: 0,
+        isListed: true,
       },
       replyInfo: undefined,
       suggestedPostInfo: undefined,
@@ -336,6 +336,6 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
 
 })()
 
-  console.log("REMOVING SOME INFO 2222!")
+  console.log("for each pai. vrum vrum222123 abracadabra nulificado camaro passando!")
 
 //sendSpoilerFromUrl("https://upload.wikimedia.org/wikipedia/commons/9/99/Black_square.jpg", 5);
