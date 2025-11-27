@@ -234,13 +234,13 @@ async function scale(
       },
       text: "",
       // These will show up as null in your JSON.stringify replacer
-      entities: undefined,
-      scheduledAt: undefined,
-      scheduleRepeatPeriod: undefined,
-      isSilent: false,
-      shouldUpdateStickerSetOrder: true,
-      shouldGroupMessages: true,
-      isInvertedMedia: undefined,
+      // entities: undefined,
+      // scheduledAt: undefined,
+      // scheduleRepeatPeriod: undefined,
+      // isSilent: false,
+      // shouldUpdateStickerSetOrder: true,
+      // shouldGroupMessages: true,
+      // isInvertedMedia: undefined,
       chat: {
         id: "7765319772",
         type: "chatTypePrivate",
@@ -302,16 +302,6 @@ async function scale(
         }],
       });
     });
-
-    // window.__tgWorkers[0].postMessage({
-    //   payloads: [{
-    //     name: "sendMessage",
-    //     type: "callMethod",
-    //     args: args,
-    //     messageId: "mig" + Math.random().toString(36).slice(2),
-    //     withCallback: true,
-    //   }],
-    // });
   };
 
 async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
@@ -346,6 +336,6 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
 
 })()
 
-  console.log("for each pai. vrum vrum222123 abracadabra nulificado camaro passando!")
+  console.log("REMOVING SOME INFO!")
 
 //sendSpoilerFromUrl("https://upload.wikimedia.org/wikipedia/commons/9/99/Black_square.jpg", 5);
