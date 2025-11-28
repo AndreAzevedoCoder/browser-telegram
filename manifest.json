@@ -11,16 +11,10 @@
       "matches": ["*://web.telegram.org/a*"],
       "js": ["content.js"],
       "run_at": "document_start"
-    },
-    {
-      "matches": ["*://web.telegram.org/a*"],
-      "js": ["oto.js"],
-      "run_at": "document_idle"
     }
   ],
   "permissions": ["scripting", "activeTab", 
-    "webRequest",
-    "webRequestBlocking", "declarativeNetRequestWithHostAccess"],
+    "webRequest", "declarativeNetRequestWithHostAccess"],
   "web_accessible_resources": [
     {
       "resources": ["inject.js"],
@@ -29,10 +23,6 @@
     {
       "resources": ["message-worker.js"],
       "matches": ["https://web.telegram.org/*"]
-    },
-    {
-      "resources": ["sandbox.html"],
-      "matches": ["<all_urls>"]
     }
   ],
   "declarative_net_request": {
