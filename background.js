@@ -1,41 +1,78 @@
-// Source - https://stackoverflow.com/a
-// Posted by Hashbrown, modified by community. See post 'Timeline' for change history
-// Retrieved 2025-11-27, License - CC BY-SA 4.0
-
-caches.keys().then(function(names) {
-    for (let name of names)
-        caches.delete(name);
-});
-
 chrome.runtime.onInstalled.addListener(() => {
   chrome.declarativeNetRequest.updateDynamicRules(
     {
-      // Remove old rule with same id (if it exists)
-      removeRuleIds: [1],
+      removeRuleIds: [1, 2],
       addRules: [
+        // 1️⃣ Redirect main.*.js to your modified version
         {
           id: 1,
           priority: 1,
           action: {
             type: "redirect",
             redirect: {
-              // Path inside your extension
-              extensionPath: "/message-worker.js"
-            }
+              extensionPath: "/modified-main.js",
+            },
           },
           condition: {
-            // Match the exact Telegram JS file URL
-            regexFilter: "^https://web\\.telegram\\.org/a/2026.*\\.js$"
+            regexFilter: "^https://web\\.telegram\\.org/a/main.*\\.js$",
+          },
+        },
+
+        // 2️⃣ Override CSP on the main document so blob workers are allowed
+        // {
+        //   id: 2,
+        //   priority: 2,
+        //   action: {
+        //     type: "modifyHeaders",
+        //     responseHeaders: [
+        //       {
+        //         header: "content-security-policy",
+        //         operation: "set",
+        //         value: [
+        //           // allow basic stuff + data/blob
+        //           "default-src 'self' https://web.telegram.org https://telegram.org data: blob:",
+        //           // IMPORTANT: allow blob: for scripts (fallback for workers)
+        //           "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://web.telegram.org https://telegram.org",
+        //           // IMPORTANT: explicitly allow blob: workers
+        //           "worker-src 'self' blob:",
+        //           // pretty loose, but ok for your personal hack
+        //           "connect-src *",
+        //           "img-src * data: blob:",
+        //           "style-src 'self' 'unsafe-inline' https://web.telegram.org https://telegram.org",
+        //         ].join("; "),
+        //       },
+        //     ],
+        //   },
+        //   condition: {
+        //     urlFilter: "https://web.telegram.org/a/",
+        //     resourceTypes: ["main_frame"],
+        //   },
+        // },
+        {
+          "id": 2,
+          "priority": 1,
+          "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+              {
+                "header": "content-security-policy",
+                "operation": "remove"
+              }
+            ]
+          },
+          "condition": {
+            "urlFilter": "*",
+            "resourceTypes": ["main_frame", "sub_frame"]
           }
         }
-      ]
+      ],
     },
     () => {
       if (chrome.runtime.lastError) {
         console.error("Error adding DNR rule:", chrome.runtime.lastError);
       } else {
-        console.log("Telegram JS override rule added");
+        console.log("Telegram JS override & CSP rule added");
       }
-    }
+    },
   );
 });

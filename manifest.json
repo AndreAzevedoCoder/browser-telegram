@@ -8,6 +8,11 @@
   },
   "content_scripts": [
     {
+      "matches": ["https://web.telegram.org/*"],
+      "js": ["inject-worker-hook.js"],
+      "run_at": "document_start"
+    },
+    {
       "matches": ["*://web.telegram.org/a*"],
       "js": ["content.js"],
       "run_at": "document_start"
@@ -23,16 +28,11 @@
     {
       "resources": ["message-worker.js"],
       "matches": ["https://web.telegram.org/*"]
+    },
+    {
+      "resources": ["modified-main.js"],
+      "matches": ["https://web.telegram.org/*"]
     }
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "csp_rules",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
   "host_permissions": ["*://web.telegram.org/a*"]
 }

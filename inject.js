@@ -325,13 +325,17 @@ async function sendSpoilerFromUrl(imageUrl, ttlSeconds = 60) {
     const OrigWorker = window.Worker;
   window.__tgWorkers = [];
 
+
+
   window.Worker = function(...args) {
+    // console.trace()
+    console.log(args)
     const w = new OrigWorker(...args);
     window.__tgWorkers.push(w);
 
     const origPostMessage = w.postMessage;
     w.postMessage = function(message, ...rest) {
-      // console.log("→ to worker:", message);
+      console.log("→ to worker:", message);
       return origPostMessage.call(this, message, ...rest);
     };
 
